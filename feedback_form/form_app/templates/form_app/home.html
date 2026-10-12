@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Property Damage Dashboard</title>
+</head>
+<body>
+    <h1>Property Damage Dashboard</h1>
+
+    <p>
+        <a href="{% url 'feedback_form' %}">Submit a New Damage Report</a>
+    </p>
+
+    <form method="get">
+        <label for="damage_type">Filter by damage type:</label>
+
+        <select name="damage_type" id="damage_type">
+            <option value="">All damage types</option>
+
+            {% for value, label in damage_types %}
+                <option value="{{ value }}" {% if selected_type == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <hr>
+
+    {% if reports %}
+        {% for report in reports %}
+            <h2>{{ report.property_address }}</h2>
+            <p><strong>Submitted by:</strong> {{ report.name }}</p>
+            <p><strong>Damage type:</strong> {{ report.get_damage_type_display }}</p>
+            <p><strong>Description:</strong> {{ report.description }}</p>
+            <p><small>Submitted: {{ report.created_at }}</small></p>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>No reports match this filter yet.</p>
+    {% endif %}
+</body>
+</html>
